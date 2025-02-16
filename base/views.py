@@ -4,6 +4,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponse
+from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
+from .models import Room, Message
+
 
 from .models import Room, Topic, Message
 from .forms import RoomForm, CustomUserCreationForm
@@ -63,16 +67,20 @@ def updateRoom(request, pk):
     return render(request, 'base/room_form.html', context)
 
 @login_required(login_url='login')
-def deleteRoom(request, pk):
-    room = Room.objects.get(id=pk)
-    if request.user != room.host:
-        return HttpResponse("You are not allowed to delete this room!")
+def deleteMessage(request, pk):
+    message = Message.objects.get(id=pk)
+
+    # Make sure only the owner can delete their own messages
+    if request.user != message.user:
+        return HttpResponse("You are not allowed to delete this message!")
 
     if request.method == "POST":
-        room.delete()
-        return redirect('home')
+        room_id = message.room.id  # Get the room ID before deleting the message
+        message.delete()
+        return redirect('room', pk=room_id)  # Redirect back to the correct room
 
-    return render(request, 'base/delete.html', {'obj': room})
+    return render(request, 'base/delete.html', {'obj': message})
+
 
 @login_required(login_url='login')
 def deleteMessage(request, pk):
