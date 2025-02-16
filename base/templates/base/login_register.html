@@ -1,23 +1,30 @@
 {% extends 'main.html' %}
-
 {% block content %}
 <div>
-    <h3>Login</h3>
-    {% if messages %}
-        <ul>
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-    <form method="POST">
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+
+    <form method="POST" action="">
         {% csrf_token %}
-        <label>Username:</label>
-        <input type="text" name="username" placeholder="Enter Username" />
-        <label>Password:</label>
-        <input type="password" name="password" placeholder="Enter Password" />
-        <button type="submit">Login</button>
+        {% if form %}
+            {{ form.as_p }}
+            <input type="submit" value="Register">
+        {% else %}
+            <label>Username</label>
+            <input type="text" name="username" placeholder="Enter username">
+            <label>Password</label>
+            <input type="password" name="password" placeholder="Enter password">
+            <input type="submit" value="Login">
+        {% endif %}
     </form>
-    <p>Don't have an account? <a href="#">Register</a></p>
+
+    <p>
+        {% if form %}
+            Already have an account? <a href="{% url 'login' %}">Login</a>
+        {% else %}
+            Don't have an account? <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </p>
 </div>
-{% endblock content %}
+{% endblock %}
