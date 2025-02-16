@@ -1,10 +1,29 @@
 {% extends 'main.html' %}
+
 {% block content %}
-<div>
-    <form method="POST" action="">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit">
-    </form>
-</div>
+    <h1>{{ room.name }}</h1>
+    <p>Hosted by: {{ room.host.username }}</p>
+
+    <hr>
+    <h3>Messages</h3>
+    <div>
+        {% for message in messages %}
+            <div>
+                <strong>{{ message.user.username }}</strong>: {{ message.body }}
+                {% if request.user == message.user %}
+                    <a href="{% url 'delete-message' message.id %}">Delete</a>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    {% if request.user.is_authenticated %}
+        <form method="POST">
+            {% csrf_token %}
+            <input type="text" name="body" placeholder="Type your message here...">
+            <button type="submit">Send</button>
+        </form>
+    {% else %}
+        <p>You must be logged in to send messages.</p>
+    {% endif %}
 {% endblock content %}
