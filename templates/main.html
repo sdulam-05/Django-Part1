@@ -1,24 +1,46 @@
+{% load static %}  <!-- Load Static Files -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyBud</title>
+    <title>My Django App</title>
+
+    <!-- Linking Static CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
 </head>
 <body>
-    <nav>
+
+    <!-- Navbar -->
+    <div class="navbar">
         <a href="{% url 'home' %}">Home</a>
         {% if request.user.is_authenticated %}
             <a href="{% url 'logout' %}">Logout</a>
+            <a href="{% url 'user-profile' request.user.id %}">Profile</a>
         {% else %}
             <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Sign Up</a>
         {% endif %}
-    </nav>
+    </div>
 
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
+    <!-- Flash Messages -->
+    {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+                <li class="message {{ message.tags }}">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
-    {% block content %}{% endblock %}
+    <!-- Main Content -->
+    <div class="container">
+        {% block content %}
+        {% endblock content %}
+    </div>
+
+    <!-- JavaScript -->
+    <script src="{% static 'js/script.js' %}"></script>
+
 </body>
 </html>

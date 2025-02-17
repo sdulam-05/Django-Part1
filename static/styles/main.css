@@ -1,0 +1,22 @@
+/* General Styles */
+body {
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #007bff;
+    padding: 10px;
+    color: white;
+    text-align: center;
+}
+
+.navbar a {
+    color: white;
+    text-decoration: none;
+    padding: 10px;
+}
