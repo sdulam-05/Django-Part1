@@ -4,16 +4,13 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.db.models import Q
 from django.http import HttpResponse
-from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from .models import Room, Message
-
-
 from .models import Room, Topic, Message
 from .forms import RoomForm, CustomUserCreationForm
 
+
+# Home Page (List all Rooms)
 def home(request):
-    q = request.GET.get('q') if request.GET.get('q') != None else ''
+    q = request.GET.get('q') if request.GET.get('q') else ''
     rooms = Room.objects.filter(
         Q(topic__name__icontains=q) |
         Q(name__icontains=q) |
@@ -25,6 +22,8 @@ def home(request):
     context = {'rooms': rooms, 'topics': topics, 'room_count': room_count}
     return render(request, 'base/home.html', context)
 
+
+# Individual Room Page (Messages and Participants)
 def room(request, pk):
     room = Room.objects.get(id=pk)
     messages = room.message_set.all().order_by('-created')
@@ -40,6 +39,8 @@ def room(request, pk):
     context = {'room': room, 'messages': messages}
     return render(request, 'base/room.html', context)
 
+
+# Create a New Room
 @login_required(login_url='login')
 def createRoom(request):
     form = RoomForm()
@@ -51,10 +52,13 @@ def createRoom(request):
     context = {'form': form}
     return render(request, 'base/room_form.html', context)
 
+
+# Update an Existing Room
 @login_required(login_url='login')
 def updateRoom(request, pk):
     room = Room.objects.get(id=pk)
     form = RoomForm(instance=room)
+
     if request.user != room.host:
         return HttpResponse("You are not allowed to edit this room!")
 
@@ -63,14 +67,16 @@ def updateRoom(request, pk):
         if form.is_valid():
             form.save()
             return redirect('home')
+
     context = {'form': form}
     return render(request, 'base/room_form.html', context)
 
+
+# Delete a Message (Only Owner Can)
 @login_required(login_url='login')
 def deleteMessage(request, pk):
     message = Message.objects.get(id=pk)
 
-    # Make sure only the owner can delete their own messages
     if request.user != message.user:
         return HttpResponse("You are not allowed to delete this message!")
 
@@ -82,18 +88,7 @@ def deleteMessage(request, pk):
     return render(request, 'base/delete.html', {'obj': message})
 
 
-@login_required(login_url='login')
-def deleteMessage(request, pk):
-    message = Message.objects.get(id=pk)
-    if request.user != message.user:
-        return HttpResponse("You are not allowed to delete this message!")
-
-    if request.method == "POST":
-        message.delete()
-        return redirect('room', pk=message.room.id)
-
-    return render(request, 'base/delete.html', {'obj': message})
-
+# User Login
 def loginPage(request):
     if request.user.is_authenticated:
         return redirect('home')
@@ -111,12 +106,17 @@ def loginPage(request):
 
     return render(request, 'base/login_register.html', {'page': 'login'})
 
+
+# User Logout
 def logoutUser(request):
     logout(request)
     return redirect('home')
 
+
+# User Registration
 def registerPage(request):
     form = CustomUserCreationForm()
+
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():

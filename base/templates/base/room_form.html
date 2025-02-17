@@ -1,0 +1,15 @@
+{% extends 'main.html' %}
+
+{% block content %}
+<h1>{% if form.instance.id %}Update{% else %}Create{% endif %} Room</h1>
+
+<div>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<a href="{% url 'home' %}">Back to Home</a>
+{% endblock %}
