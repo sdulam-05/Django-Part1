@@ -13,4 +13,12 @@ urlpatterns = [
     path('register/', views.registerPage, name="register"),
         path('update-user/', views.updateUser, name='update-user'),
 
+            # 🌐 API URLs
+    path('api/', views.apiOverview, name="api-overview"),
+    path('api/users/', views.getUsers, name="api-users"),
+    path('api/user/<str:pk>/', views.getUser, name="api-user"),
+    path('api/rooms/', views.getRooms, name="api-rooms"),
+    path('api/room/<str:pk>/', views.getRoom, name="api-room"),
+    path('api/messages/', views.getMessages, name="api-messages"),
+
 ]
