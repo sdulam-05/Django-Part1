@@ -1,30 +1,63 @@
 {% extends 'main.html' %}
+
 {% block content %}
-<div>
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-
-    <form method="POST" action="">
-        {% csrf_token %}
-        {% if form %}
-            {{ form.as_p }}
-            <input type="submit" value="Register">
-        {% else %}
-            <label>Username</label>
-            <input type="text" name="username" placeholder="Enter username">
-            <label>Password</label>
-            <input type="password" name="password" placeholder="Enter password">
-            <input type="submit" value="Login">
-        {% endif %}
-    </form>
-
-    <p>
-        {% if form %}
-            Already have an account? <a href="{% url 'login' %}">Login</a>
-        {% else %}
-            Don't have an account? <a href="{% url 'register' %}">Register</a>
-        {% endif %}
-    </p>
-</div>
-{% endblock %}
+    <main class="auth layout">
+      {% if page == 'login' %}
+      <div class="container">
+        <div class="layout__box">
+          <div class="layout__boxHeader">
+            <div class="layout__boxTitle">
+              <h3>Login</h3>
+            </div>
+          </div>
+          <div class="layout__body">
+            <h2 class="auth__tagline">Find your study partner</h2>
+            <form class="form" action="" method="POST">
+              {% csrf_token %}
+              <div class="form__group form__group">
+                <label for="room_name">Username</label>
+                <input id="username" name="username" type="text" placeholder="e.g. dennis_ivy" />
+              </div>
+              <div class="form__group">
+                <label for="password">Password</label>
+                <input id="password" name="password" type="password" placeholder="••••••••" />
+              </div>
+              <button class="btn btn--main" type="submit">Login</button>
+            </form>
+            <div class="auth__action">
+              <p>Haven't signed up yet?</p>
+              <a href="{% url 'register' %}" class="btn btn--link">Sign Up</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% else %}
+      <div class="container">
+        <div class="layout__box">
+          <div class="layout__boxHeader">
+            <div class="layout__boxTitle">
+              <h3>Register</h3>
+            </div>
+          </div>
+          <div class="layout__body">
+            <h2 class="auth__tagline">Find your study partner</h2>
+            <form class="form" action="" method="POST">
+              {% csrf_token %}
+              {% for field in form %}
+              <div class="form__group">
+                <label for="room_name">{{ field.label }}</label>
+                {{ field }}
+              </div>
+              {% endfor %}
+              <button class="btn btn--main" type="submit">Register</button>
+            </form>
+            <div class="auth__action">
+              <p>Already signed up?</p>
+              <a href="{% url 'login' %}" class="btn btn--link">Sign In</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endif %}
+    </main>
+{% endblock content %}

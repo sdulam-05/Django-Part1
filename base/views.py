@@ -89,6 +89,19 @@ def updateRoom(request, pk):
     return render(request, 'base/room_form.html', context)
 
 
+def updateUser(request):
+    user = request.user
+    form = UserForm(instance=user)
+
+    if request.method == 'POST':
+        form = UserForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('user-profile', pk=user.id)
+
+    context = {'form': form}
+    return render(request, 'base/update-user.html', context)
+
 # Delete a Message (Only Owner Can)
 @login_required(login_url='login')
 def deleteMessage(request, pk):
