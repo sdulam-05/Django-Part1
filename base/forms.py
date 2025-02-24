@@ -2,13 +2,13 @@ from django.forms import ModelForm
 from .models import Room
 from django.contrib.auth.models import User
 
-class RoomForm(ModelForm):
+
+class MyUserCreationForm(UserCreationForm):
     class Meta:
-        model = Room
-        fields = '__all__'
-        exclude = ['host', 'participants']
+        model = User
+        fields = ["name", "email", "username", "password1", "password2"]
 
 class UserForm(ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'email']
+        fields = ["name", "email", "bio", "avatar"]
