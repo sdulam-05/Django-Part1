@@ -37,11 +37,15 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+
     'base',
 
     # Third-Party Apps
     'rest_framework',
+
+     'rest_framework',
+    'corsheaders',  # Added for CORS support
+    'base',
 ]
 
 MIDDLEWARE = [
@@ -52,9 +56,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  # Add this line
+    'django.middleware.security.SecurityMiddleware',
+
+
 ]
 
 ROOT_URLCONF = 'studybud.urls'
+CORS_ALLOW_ALL_ORIGINS = True
 
 TEMPLATES = [
     {
