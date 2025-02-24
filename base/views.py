@@ -175,6 +175,11 @@ def apiOverview(request):  # Remove extra indentation
         'List Messages': '/api/messages/',
     }
     return Response(api_urls)
+@api_view(['GET'])
+def getUsers(request):
+    users = User.objects.all()
+    serializer = UserSerializer(users, many=True)
+    return Response(serializer.data)
 
 # ✅ Get All Users
 @api_view(['GET'])

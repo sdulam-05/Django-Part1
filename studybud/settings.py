@@ -64,6 +64,8 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'studybud.urls'
 CORS_ALLOW_ALL_ORIGINS = True
+# settings.py
+AUTH_USER_MODEL = 'base.User'
 
 TEMPLATES = [
     {

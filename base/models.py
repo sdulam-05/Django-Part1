@@ -28,3 +28,11 @@ class Message(models.Model):
 
     def __str__(self):
         return self.body[:50]
+
+    class User(AbstractUser):
+    name = models.CharField(max_length=200, null=True)
+    email = models.EmailField(unique=True)
+    bio = models.TextField(null=True)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
